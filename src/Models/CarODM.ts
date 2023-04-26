@@ -37,7 +37,7 @@ class CarODM {
     return this.model.findById(id);
   }
 
-  public async updateById(id: string, obj: Partial<ICar>) {
+  public async updateById(id: string, obj: ICar) {
     if (!isValidObjectId(id)) throw Error('Invalid mongo id');
     return this.model.findByIdAndUpdate(
       { _id: id },

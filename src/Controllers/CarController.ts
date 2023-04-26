@@ -74,11 +74,12 @@ class CarController {
       if (!isValidObjectId(id)) {
         return this.res.status(422).json({ message: 'Invalid mongo id' });
       }
-      const upCarById = await this.service.updateById(id, updatedCar);
-      if (upCarById === null) {
+      const carById = await this.service.getById(id);
+      if (carById === null) {
         return this.res.status(404).json({ message: 'Car not found' });
       }
-      return this.res.status(200).json(upCarById);
+      const updatedById = await this.service.updateById(id, updatedCar);
+      return this.res.status(200).json(updatedById);
     } catch (error) {
       this.next(error);
     }
