@@ -30,6 +30,10 @@ class CarODM {
   public async getAll() {
     return this.model.find();
   }
+
+  public async getById(id: string) {
+    return this.model.findById({ _id: id });
+  }
 }
 
 export default CarODM;
