@@ -27,7 +27,7 @@ class CarODM {
     return this.model.create({ ...car });
   }
 
-  public async find() {
+  public async getAll() {
     return this.model.find();
   }
 }
