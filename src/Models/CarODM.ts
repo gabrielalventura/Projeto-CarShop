@@ -1,6 +1,8 @@
 import {
   Model,
   Schema,
+  UpdateQuery,
+  isValidObjectId,
   model,
   models,
 } from 'mongoose';
@@ -34,6 +36,15 @@ class CarODM {
   public async getById(id: string) {
     return this.model.findById(id);
   }
-}
+
+  public async updateById(id: string, obj: Partial<ICar>) {
+    if (!isValidObjectId(id)) throw Error('Invalid mongo id');
+    return this.model.findByIdAndUpdate(
+      { _id: id },
+      { ...obj } as UpdateQuery<ICar>,
+      { new: true },
+    );
+  }
+} // função desenvolvida com base no  código da aula ao vivo 12.2
 
 export default CarODM;
