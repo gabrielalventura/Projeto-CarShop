@@ -32,7 +32,7 @@ class CarODM {
   }
 
   public async getById(id: string) {
-    return this.model.findById({ _id: id });
+    return this.model.findById(id);
   }
 }
 

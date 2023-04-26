@@ -3,6 +3,7 @@ import {
   Request,
   Response,
 } from 'express';
+import { isValidObjectId } from 'mongoose';
 import ICar from '../Interfaces/ICar';
 import CarService from '../Services/CarService';
 
@@ -49,8 +50,18 @@ class CarController {
 
   public async getById() {
     const { id } = this.req.params;
-    const { status, message } = await this.service.getById(id);
-    return this.res.status(status).json(message);
+    try {
+      if (!isValidObjectId(id)) {
+        return this.res.status(422).json({ message: 'Invalid mongo id' });
+      }
+      const carById = await this.service.getById(id);
+      if (carById === null) {
+        return this.res.status(404).json({ message: 'Car not found' });
+      }
+      return this.res.status(200).json(carById);
+    } catch (error) {
+      this.next(error);
+    }
   }
 }
 
