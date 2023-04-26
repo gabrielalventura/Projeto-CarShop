@@ -45,7 +45,6 @@ describe('Deveria cadastrar um carro novo e obter carros cadastrados', function 
       model: 'Vectra',
       year: 1999,
       color: 'Green',
-      status: true,
       buyValue: 12.300,
       doorsQty: 4,
       seatsQty: 5,
@@ -69,8 +68,56 @@ describe('Deveria cadastrar um carro novo e obter carros cadastrados', function 
     // Assert
     expect(result).to.be.deep.equal(carsOutput);
   });
+
+  it('Deveria retornar um carro pelo id com sucesso', async function () {
+    // Arrange
+    const validId = '64497df4d733721397cf0f7f';
+    const carOutput = new Car({
+      id: validId,
+      model: 'Vectra',
+      year: 1999,
+      color: 'Green',
+      buyValue: 12.300,
+      doorsQty: 4,
+      seatsQty: 5,
+    });
+    sinon.stub(Model, 'findById').resolves(carOutput);
+
+    // Act
+    const service = new CarService();
+    const result = await service.getById(validId);
+
+    // Assert
+    expect(result).to.be.deep.equal(carOutput);
+  });
+
+  it('Deveria retornar uma mensagem de falha em caso de id não encontrado', async function () {
+    // Arrange
+    const invalidId = '2';
+    const carOutput = new Car({
+      id: invalidId,
+      model: 'Vectra',
+      year: 1999,
+      color: 'Green',
+      buyValue: 12.300,
+      doorsQty: 4,
+      seatsQty: 5,
+    });
+    sinon.stub(Model, 'findById').resolves(carOutput);
+
+    // Act
+    try {
+      const service = new CarService();
+      await service.getById(invalidId);
+    } catch (error) {
+      // Assert
+      expect((error as Error).message).to.be.equal('Car not found');
+    }
+  });
+
+  afterEach(function () {
+    sinon.restore();
+  });
 });
 
-afterEach(function () {
-  sinon.restore();
-});
+// testes desenvolvidos tendo como base material do course da seção 12 dia 01;
