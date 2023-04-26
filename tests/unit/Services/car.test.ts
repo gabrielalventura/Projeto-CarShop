@@ -70,3 +70,7 @@ describe('Deveria cadastrar um carro novo e obter carros cadastrados', function 
     expect(result).to.be.deep.equal(carsOutput);
   });
 });
+
+afterEach(function () {
+  sinon.restore();
+});
