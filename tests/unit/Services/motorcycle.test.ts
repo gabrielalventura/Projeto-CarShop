@@ -118,6 +118,41 @@ describe('Deveria cadastrar uma moto nova e obter motos cadastradas', function (
     }
   });
 
+  describe('Deveria realizar o update pelo id', function () {
+    it('Com id valido, deveria realizar o update', async function () {
+      // Arrange
+      const motoInput = new Motorcycle({
+        id: '634852326b35b59438fbea35',
+        model: 'Honda Cbr 900rr',
+        year: 2011,
+        color: 'Orange',
+        status: true,
+        buyValue: 59.900,
+        category: 'Street',
+        engineCapacity: 1000,
+      }); 
+      const upMoto : IMotorcycle = ({
+        id: '634852326b35b59438fbea35',
+        model: 'Honda Cbr 900rr',
+        year: 2008,
+        color: 'Red',
+        status: true,
+        buyValue: 54.500,
+        category: 'Street',
+        engineCapacity: 900,
+      });
+      sinon.stub(Model, 'findById').resolves(motoInput);
+      sinon.stub(Model, 'findByIdAndUpdate').resolves(upMoto);
+
+      // Act
+      const service = new MotorcycleService();
+      const result = await service.updateById('634852326b35b59438fbea35', upMoto);
+
+      // Assert
+      expect(result).to.be.deep.equal(upMoto);
+    });
+  });  
+
   afterEach(function () {
     sinon.restore();
   });
