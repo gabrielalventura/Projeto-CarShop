@@ -77,6 +77,7 @@ describe('Deveria cadastrar um carro novo e obter carros cadastrados', function 
       model: 'Vectra',
       year: 1999,
       color: 'Green',
+      status: false,
       buyValue: 12.300,
       doorsQty: 4,
       seatsQty: 5,
@@ -99,6 +100,7 @@ describe('Deveria cadastrar um carro novo e obter carros cadastrados', function 
       model: 'Vectra',
       year: 1999,
       color: 'Green',
+      status: false,
       buyValue: 12.300,
       doorsQty: 4,
       seatsQty: 5,
@@ -114,6 +116,40 @@ describe('Deveria cadastrar um carro novo e obter carros cadastrados', function 
       expect((error as Error).message).to.be.equal('Car not found');
     }
   });
+
+  describe('Deveria realizar o update pelo id', function () {
+    it('Com id valido, deveria realizar o update', async function () {
+      // Arrange
+      const carInput = new Car({
+        id: '64497df4d733721397cf0f7f',
+        model: 'Vectra',
+        year: 1999,
+        color: 'Green',
+        buyValue: 12.300,
+        doorsQty: 4,
+        seatsQty: 5,
+      }); 
+      const upCar : ICar = ({
+        id: '64497df4d733721397cf0f7f',
+        model: 'Vectra',
+        year: 1996,
+        color: 'Black',
+        status: false,
+        buyValue: 12.300,
+        doorsQty: 4,
+        seatsQty: 5,
+      });
+      sinon.stub(Model, 'findById').resolves(carInput);
+      sinon.stub(Model, 'findByIdAndUpdate').resolves(upCar);
+
+      // Act
+      const service = new CarService();
+      const result = await service.updateById('64497df4d733721397cf0f7f', upCar);
+
+      // Assert
+      expect(result).to.be.deep.equal(upCar);
+    });
+  });  
 
   afterEach(function () {
     sinon.restore();
